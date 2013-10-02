@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MovieTrackerModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="MovieTrackerModelStoreContainer">
+          <EntitySet Name="aspnet_Users" EntityType="MovieTrackerModel.Store.aspnet_Users" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Genres" EntityType="MovieTrackerModel.Store.Genres" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Movies" EntityType="MovieTrackerModel.Store.Movies" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_aspnet_UsersMovie" Association="MovieTrackerModel.Store.FK_aspnet_UsersMovie">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="Movies" EntitySet="Movies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GenreMovie" Association="MovieTrackerModel.Store.FK_GenreMovie">
+            <End Role="Genres" EntitySet="Genres" />
+            <End Role="Movies" EntitySet="Movies" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="aspnet_Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="ApplicationId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="LoweredUserName" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="MobileAlias" Type="nvarchar" MaxLength="16" />
+          <Property Name="IsAnonymous" Type="bit" Nullable="false" />
+          <Property Name="LastActivityDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Genres">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Movies">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="aspnet_UsersUserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Directors" Type="nvarchar(max)" />
+          <Property Name="Writers" Type="nvarchar(max)" />
+          <Property Name="Stars" Type="nvarchar(max)" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Rating" Type="smallint" Nullable="false" />
+          <Property Name="GenreId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_aspnet_UsersMovie">
+          <End Role="aspnet_Users" Type="MovieTrackerModel.Store.aspnet_Users" Multiplicity="1" />
+          <End Role="Movies" Type="MovieTrackerModel.Store.Movies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Movies">
+              <PropertyRef Name="aspnet_UsersUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GenreMovie">
+          <End Role="Genres" Type="MovieTrackerModel.Store.Genres" Multiplicity="1" />
+          <End Role="Movies" Type="MovieTrackerModel.Store.Movies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genres">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Movies">
+              <PropertyRef Name="GenreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MovieTrackerModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="movietrackerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="aspnet_Users" EntityType="MovieTrackerModel.aspnet_Users" />
+          <EntitySet Name="Movies" EntityType="MovieTrackerModel.Movie" />
+          <AssociationSet Name="aspnet_UsersMovie" Association="MovieTrackerModel.aspnet_UsersMovie">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="Movie" EntitySet="Movies" />
+          </AssociationSet>
+          <EntitySet Name="Genres" EntityType="MovieTrackerModel.Genre" />
+          <AssociationSet Name="GenreMovie" Association="MovieTrackerModel.GenreMovie">
+            <End Role="Genre" EntitySet="Genres" />
+            <End Role="Movie" EntitySet="Movies" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="aspnet_Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="ApplicationId" Type="Guid" Nullable="false" />
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="LoweredUserName" Type="String" Nullable="false" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="MobileAlias" Type="String" MaxLength="16" Unicode="true" FixedLength="false" />
+          <Property Name="IsAnonymous" Type="Boolean" Nullable="false" />
+          <Property Name="LastActivityDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Movies" Relationship="MovieTrackerModel.aspnet_UsersMovie" FromRole="aspnet_Users" ToRole="Movie" />
+        </EntityType>
+        <EntityType Name="Movie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="aspnet_Users" Relationship="MovieTrackerModel.aspnet_UsersMovie" FromRole="Movie" ToRole="aspnet_Users" />
+          <Property Type="Guid" Name="aspnet_UsersUserId" Nullable="false" />
+          <Property Type="String" Name="Directors" Nullable="true" />
+          <Property Type="String" Name="Writers" Nullable="true" />
+          <Property Type="String" Name="Stars" Nullable="true" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <Property Type="Int16" Name="Rating" Nullable="false" />
+          <NavigationProperty Name="Genre" Relationship="MovieTrackerModel.GenreMovie" FromRole="Movie" ToRole="Genre" />
+          <Property Type="Int32" Name="GenreId" Nullable="false" />
+        </EntityType>
+        <Association Name="aspnet_UsersMovie">
+          <End Type="MovieTrackerModel.aspnet_Users" Role="aspnet_Users" Multiplicity="1" />
+          <End Type="MovieTrackerModel.Movie" Role="Movie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Movie">
+              <PropertyRef Name="aspnet_UsersUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Genre">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <NavigationProperty Name="Movies" Relationship="MovieTrackerModel.GenreMovie" FromRole="Genre" ToRole="Movie" />
+        </EntityType>
+        <Association Name="GenreMovie">
+          <End Type="MovieTrackerModel.Genre" Role="Genre" Multiplicity="1" />
+          <End Type="MovieTrackerModel.Movie" Role="Movie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genre">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Movie">
+              <PropertyRef Name="GenreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MovieTrackerModelStoreContainer" CdmEntityContainer="movietrackerEntities">
+    <EntitySetMapping Name="aspnet_Users">
+      <EntityTypeMapping TypeName="IsTypeOf(MovieTrackerModel.aspnet_Users)">
+        <MappingFragment StoreEntitySet="aspnet_Users">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="LoweredUserName" ColumnName="LoweredUserName" />
+          <ScalarProperty Name="MobileAlias" ColumnName="MobileAlias" />
+          <ScalarProperty Name="IsAnonymous" ColumnName="IsAnonymous" />
+          <ScalarProperty Name="LastActivityDate" ColumnName="LastActivityDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Movies">
+      <EntityTypeMapping TypeName="IsTypeOf(MovieTrackerModel.Movie)">
+        <MappingFragment StoreEntitySet="Movies">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="aspnet_UsersUserId" ColumnName="aspnet_UsersUserId" />
+          <ScalarProperty Name="Directors" ColumnName="Directors" />
+          <ScalarProperty Name="Writers" ColumnName="Writers" />
+          <ScalarProperty Name="Stars" ColumnName="Stars" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Rating" ColumnName="Rating" />
+          <ScalarProperty Name="GenreId" ColumnName="GenreId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Genres">
+      <EntityTypeMapping TypeName="IsTypeOf(MovieTrackerModel.Genre)">
+        <MappingFragment StoreEntitySet="Genres">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="MovieTracker">
+        <EntityTypeShape EntityType="MovieTrackerModel.aspnet_Users" Width="1.5" PointX="0.75" PointY="1.25" Height="2.5571907552083331" IsExpanded="true" />
+        <EntityTypeShape EntityType="MovieTrackerModel.Movie" Width="2.5" PointX="3.875" PointY="1.375" Height="2.7494921874999996" />
+        <AssociationConnector Association="MovieTrackerModel.aspnet_UsersMovie">
+          <ConnectorPoint PointX="2.25" PointY="2.5910953776041667" />
+          <ConnectorPoint PointX="3.875" PointY="2.5910953776041667" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="MovieTrackerModel.Genre" Width="1.5" PointX="8.25" PointY="1.5" Height="1.59568359375" />
+        <AssociationConnector Association="MovieTrackerModel.GenreMovie">
+          <ConnectorPoint PointX="8.25" PointY="2.297841796875" />
+          <ConnectorPoint PointX="6.375" PointY="2.297841796875" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
