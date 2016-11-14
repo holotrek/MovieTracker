@@ -4,8 +4,8 @@ MovieTracker
 Requirements
 ----
 
- - [Visual Studio 2012](http://www.microsoft.com/visualstudio/en-us/try)
- - [SQL Express 2012](http://www.microsoft.com/en-us/sqlserver/editions/2012-editions/express.aspx)
+ - [Visual Studio](http://www.microsoft.com/visualstudio/en-us/try)
+ - [SQL Express](http://www.microsoft.com/en-us/sqlserver/editions/2012-editions/express.aspx)
 
 _[Note: movie tracker usage nuget package restore](http://docs.nuget.org/docs/workflows/using-nuget-without-committing-packages)_
 
