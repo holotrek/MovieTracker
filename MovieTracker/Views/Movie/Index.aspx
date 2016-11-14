@@ -10,34 +10,38 @@
             $(".clearRating").click(function () {
                 var $td = $(this).closest("td");
                 var movieToClearRating = {
-                    movieId: $(this).closest(".movieRating").data('movieId')
+                    movieId: $(this).closest(".movieRating").data('movieid')
                 };
                 $.ajax('<%:Url.Action("ClearRating") %>', {
                     type: 'post',
-                    data: movieToClearRating
-                }).success(function (data) {
-                    $td.empty().append(data);
+                    data: movieToClearRating,
+                    success: function (data) {
+                        $td.empty().append(data);
+                    }
                 });
             });
             $(".star").click(function () {
                 var $td = $(this).closest("td");
                 var rating = $(this).index() + 1;
+
                 var movieToRate = {
-                    movieId: $(this).closest(".movieRating").data('movieId'),
+                    movieId: $(this).closest(".movieRating").data('movieid'),
                     rating : rating
                 };
+
                 $.ajax('<%:Url.Action("AddRating") %>', {
                     type: 'post',
-                    data: movieToRate
-                }).success(function (data) {
-                    $td.empty().append(data);
+                    data: movieToRate,
+                    success: function (data) {
+                        $td.empty().append(data);
+                    }
                 });
             });
             $(".star").hover(function () {
-                $(this).prevAll(".star").andSelf().addClass("hovered");
+                $(this).prevAll(".star").addBack().addClass("hovered");
 
             }, function () {
-                $(this).siblings(".star").andSelf().removeClass("hovered");
+                $(this).siblings(".star").addBack().removeClass("hovered");
             });
         })
     

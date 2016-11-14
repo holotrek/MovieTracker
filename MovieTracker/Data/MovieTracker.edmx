@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="MovieTrackerModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="MovieTrackerModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="MovieTrackerModelStoreContainer">
-          <EntitySet Name="aspnet_Users" EntityType="MovieTrackerModel.Store.aspnet_Users" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Genres" EntityType="MovieTrackerModel.Store.Genres" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Movies" EntityType="MovieTrackerModel.Store.Movies" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="aspnet_Users" EntityType="MovieTrackerModel.Store.aspnet_Users" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Genres" EntityType="MovieTrackerModel.Store.Genres" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Movies" EntityType="MovieTrackerModel.Store.Movies" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
           <AssociationSet Name="FK_aspnet_UsersMovie" Association="MovieTrackerModel.Store.FK_aspnet_UsersMovie">
             <End Role="aspnet_Users" EntitySet="aspnet_Users" />
             <End Role="Movies" EntitySet="Movies" />
@@ -77,8 +77,8 @@
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="MovieTrackerModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
-        <EntityContainer Name="movietrackerEntities" annotation:LazyLoadingEnabled="true">
+      <Schema Namespace="MovieTrackerModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="movietrackerEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
           <EntitySet Name="aspnet_Users" EntityType="MovieTrackerModel.aspnet_Users" />
           <EntitySet Name="Movies" EntityType="MovieTrackerModel.Movie" />
           <AssociationSet Name="aspnet_UsersMovie" Association="MovieTrackerModel.aspnet_UsersMovie">
@@ -108,7 +108,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="aspnet_Users" Relationship="MovieTrackerModel.aspnet_UsersMovie" FromRole="Movie" ToRole="aspnet_Users" />
           <Property Type="Guid" Name="aspnet_UsersUserId" Nullable="false" />
           <Property Type="String" Name="Directors" Nullable="true" />
@@ -135,7 +135,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Name" Nullable="false" />
           <NavigationProperty Name="Movies" Relationship="MovieTrackerModel.GenreMovie" FromRole="Genre" ToRole="Movie" />
         </EntityType>
@@ -155,7 +155,7 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="MovieTrackerModelStoreContainer" CdmEntityContainer="movietrackerEntities">
     <EntitySetMapping Name="aspnet_Users">
       <EntityTypeMapping TypeName="IsTypeOf(MovieTrackerModel.aspnet_Users)">
@@ -196,34 +196,34 @@
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
-  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
-    <Connection>
-      <DesignerInfoPropertySet>
-        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
-      </DesignerInfoPropertySet>
-    </Connection>
-    <Options>
-      <DesignerInfoPropertySet>
-        <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="True" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
-      </DesignerInfoPropertySet>
-    </Options>
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
-    <Diagrams>
-      <Diagram Name="MovieTracker">
-        <EntityTypeShape EntityType="MovieTrackerModel.aspnet_Users" Width="1.5" PointX="0.75" PointY="1.25" Height="2.5571907552083331" IsExpanded="true" />
-        <EntityTypeShape EntityType="MovieTrackerModel.Movie" Width="2.5" PointX="3.875" PointY="1.375" Height="2.7494921874999996" />
-        <AssociationConnector Association="MovieTrackerModel.aspnet_UsersMovie">
-          <ConnectorPoint PointX="2.25" PointY="2.5910953776041667" />
-          <ConnectorPoint PointX="3.875" PointY="2.5910953776041667" />
-        </AssociationConnector>
-        <EntityTypeShape EntityType="MovieTrackerModel.Genre" Width="1.5" PointX="8.25" PointY="1.5" Height="1.59568359375" />
-        <AssociationConnector Association="MovieTrackerModel.GenreMovie">
-          <ConnectorPoint PointX="8.25" PointY="2.297841796875" />
-          <ConnectorPoint PointX="6.375" PointY="2.297841796875" />
-        </AssociationConnector>
-      </Diagram>
-    </Diagrams>
-  </Designer>
+    <edmx:Diagrams>
+      <edmx:Diagram Name="MovieTracker">
+        <edmx:EntityTypeShape EntityType="MovieTrackerModel.aspnet_Users" Width="1.5" PointX="0.75" PointY="1.25" Height="2.5571907552083331" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="MovieTrackerModel.Movie" Width="2.5" PointX="3.875" PointY="1.375" Height="2.7494921874999996" />
+        <edmx:AssociationConnector Association="MovieTrackerModel.aspnet_UsersMovie">
+          <edmx:ConnectorPoint PointX="2.25" PointY="2.5910953776041667" />
+          <edmx:ConnectorPoint PointX="3.875" PointY="2.5910953776041667" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="MovieTrackerModel.Genre" Width="1.5" PointX="8.25" PointY="1.5" Height="1.59568359375" />
+        <edmx:AssociationConnector Association="MovieTrackerModel.GenreMovie">
+          <edmx:ConnectorPoint PointX="8.25" PointY="2.297841796875" />
+          <edmx:ConnectorPoint PointX="6.375" PointY="2.297841796875" />
+        </edmx:AssociationConnector>
+      </edmx:Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
 </edmx:Edmx>

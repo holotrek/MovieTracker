@@ -1,6 +1,5 @@
 using System.Web;
 using System.Web.Mvc;
-using MovieTracker.Tests.Unit.Controllers;
 
 namespace MovieTracker.Tests.Unit.Fakes
 {

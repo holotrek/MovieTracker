@@ -9,25 +9,24 @@
 
 using System;
 using System.ComponentModel;
-using System.Data.EntityClient;
-using System.Data.Objects;
-using System.Data.Objects.DataClasses;
-using System.Linq;
+using System.Data.Entity.Core.EntityClient;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Core.Objects.DataClasses;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
-[assembly: EdmSchemaAttribute()]
+[assembly: EdmSchema()]
 #region EDM Relationship Metadata
 
-[assembly: EdmRelationshipAttribute("MovieTrackerModel", "aspnet_UsersMovie", "aspnet_Users", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(MovieTracker.Data.aspnet_Users), "Movie", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(MovieTracker.Data.Movie), true)]
-[assembly: EdmRelationshipAttribute("MovieTrackerModel", "GenreMovie", "Genre", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(MovieTracker.Data.Genre), "Movie", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(MovieTracker.Data.Movie), true)]
+[assembly: EdmRelationshipAttribute("MovieTrackerModel", "aspnet_UsersMovie", "aspnet_Users", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(MovieTracker.Data.aspnet_Users), "Movie", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(MovieTracker.Data.Movie), true)]
+[assembly: EdmRelationshipAttribute("MovieTrackerModel", "GenreMovie", "Genre", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(MovieTracker.Data.Genre), "Movie", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(MovieTracker.Data.Movie), true)]
 
 #endregion
 
 namespace MovieTracker.Data
 {
     #region Contexts
-    
+
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -189,7 +188,7 @@ namespace MovieTracker.Data
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -206,7 +205,7 @@ namespace MovieTracker.Data
             {
                 OnApplicationIdChanging(value);
                 ReportPropertyChanging("ApplicationId");
-                _ApplicationId = StructuralObject.SetValidValue(value);
+                _ApplicationId = StructuralObject.SetValidValue(value, "ApplicationId");
                 ReportPropertyChanged("ApplicationId");
                 OnApplicationIdChanged();
             }
@@ -232,7 +231,7 @@ namespace MovieTracker.Data
                 {
                     OnUserIdChanging(value);
                     ReportPropertyChanging("UserId");
-                    _UserId = StructuralObject.SetValidValue(value);
+                    _UserId = StructuralObject.SetValidValue(value, "UserId");
                     ReportPropertyChanged("UserId");
                     OnUserIdChanged();
                 }
@@ -257,7 +256,7 @@ namespace MovieTracker.Data
             {
                 OnUserNameChanging(value);
                 ReportPropertyChanging("UserName");
-                _UserName = StructuralObject.SetValidValue(value, false);
+                _UserName = StructuralObject.SetValidValue(value, false, "UserName");
                 ReportPropertyChanged("UserName");
                 OnUserNameChanged();
             }
@@ -281,7 +280,7 @@ namespace MovieTracker.Data
             {
                 OnLoweredUserNameChanging(value);
                 ReportPropertyChanging("LoweredUserName");
-                _LoweredUserName = StructuralObject.SetValidValue(value, false);
+                _LoweredUserName = StructuralObject.SetValidValue(value, false, "LoweredUserName");
                 ReportPropertyChanged("LoweredUserName");
                 OnLoweredUserNameChanged();
             }
@@ -305,7 +304,7 @@ namespace MovieTracker.Data
             {
                 OnMobileAliasChanging(value);
                 ReportPropertyChanging("MobileAlias");
-                _MobileAlias = StructuralObject.SetValidValue(value, true);
+                _MobileAlias = StructuralObject.SetValidValue(value, true, "MobileAlias");
                 ReportPropertyChanged("MobileAlias");
                 OnMobileAliasChanged();
             }
@@ -329,7 +328,7 @@ namespace MovieTracker.Data
             {
                 OnIsAnonymousChanging(value);
                 ReportPropertyChanging("IsAnonymous");
-                _IsAnonymous = StructuralObject.SetValidValue(value);
+                _IsAnonymous = StructuralObject.SetValidValue(value, "IsAnonymous");
                 ReportPropertyChanged("IsAnonymous");
                 OnIsAnonymousChanged();
             }
@@ -353,7 +352,7 @@ namespace MovieTracker.Data
             {
                 OnLastActivityDateChanging(value);
                 ReportPropertyChanging("LastActivityDate");
-                _LastActivityDate = StructuralObject.SetValidValue(value);
+                _LastActivityDate = StructuralObject.SetValidValue(value, "LastActivityDate");
                 ReportPropertyChanged("LastActivityDate");
                 OnLastActivityDateChanged();
             }
@@ -364,7 +363,6 @@ namespace MovieTracker.Data
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -418,7 +416,7 @@ namespace MovieTracker.Data
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -437,7 +435,7 @@ namespace MovieTracker.Data
                 {
                     OnIdChanging(value);
                     ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
+                    _Id = StructuralObject.SetValidValue(value, "Id");
                     ReportPropertyChanged("Id");
                     OnIdChanged();
                 }
@@ -462,7 +460,7 @@ namespace MovieTracker.Data
             {
                 OnNameChanging(value);
                 ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, false);
+                _Name = StructuralObject.SetValidValue(value, false, "Name");
                 ReportPropertyChanged("Name");
                 OnNameChanged();
             }
@@ -473,7 +471,6 @@ namespace MovieTracker.Data
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -533,7 +530,7 @@ namespace MovieTracker.Data
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -552,7 +549,7 @@ namespace MovieTracker.Data
                 {
                     OnIdChanging(value);
                     ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
+                    _Id = StructuralObject.SetValidValue(value, "Id");
                     ReportPropertyChanged("Id");
                     OnIdChanged();
                 }
@@ -577,7 +574,7 @@ namespace MovieTracker.Data
             {
                 Onaspnet_UsersUserIdChanging(value);
                 ReportPropertyChanging("aspnet_UsersUserId");
-                _aspnet_UsersUserId = StructuralObject.SetValidValue(value);
+                _aspnet_UsersUserId = StructuralObject.SetValidValue(value, "aspnet_UsersUserId");
                 ReportPropertyChanged("aspnet_UsersUserId");
                 Onaspnet_UsersUserIdChanged();
             }
@@ -601,7 +598,7 @@ namespace MovieTracker.Data
             {
                 OnDirectorsChanging(value);
                 ReportPropertyChanging("Directors");
-                _Directors = StructuralObject.SetValidValue(value, true);
+                _Directors = StructuralObject.SetValidValue(value, true, "Directors");
                 ReportPropertyChanged("Directors");
                 OnDirectorsChanged();
             }
@@ -625,7 +622,7 @@ namespace MovieTracker.Data
             {
                 OnWritersChanging(value);
                 ReportPropertyChanging("Writers");
-                _Writers = StructuralObject.SetValidValue(value, true);
+                _Writers = StructuralObject.SetValidValue(value, true, "Writers");
                 ReportPropertyChanged("Writers");
                 OnWritersChanged();
             }
@@ -649,7 +646,7 @@ namespace MovieTracker.Data
             {
                 OnStarsChanging(value);
                 ReportPropertyChanging("Stars");
-                _Stars = StructuralObject.SetValidValue(value, true);
+                _Stars = StructuralObject.SetValidValue(value, true, "Stars");
                 ReportPropertyChanged("Stars");
                 OnStarsChanged();
             }
@@ -673,7 +670,7 @@ namespace MovieTracker.Data
             {
                 OnNameChanging(value);
                 ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, false);
+                _Name = StructuralObject.SetValidValue(value, false, "Name");
                 ReportPropertyChanged("Name");
                 OnNameChanged();
             }
@@ -697,7 +694,7 @@ namespace MovieTracker.Data
             {
                 OnRatingChanging(value);
                 ReportPropertyChanging("Rating");
-                _Rating = StructuralObject.SetValidValue(value);
+                _Rating = StructuralObject.SetValidValue(value, "Rating");
                 ReportPropertyChanged("Rating");
                 OnRatingChanged();
             }
@@ -721,7 +718,7 @@ namespace MovieTracker.Data
             {
                 OnGenreIdChanging(value);
                 ReportPropertyChanging("GenreId");
-                _GenreId = StructuralObject.SetValidValue(value);
+                _GenreId = StructuralObject.SetValidValue(value, "GenreId");
                 ReportPropertyChanged("GenreId");
                 OnGenreIdChanged();
             }
@@ -732,7 +729,6 @@ namespace MovieTracker.Data
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -817,5 +813,4 @@ namespace MovieTracker.Data
 
     #endregion
 
-    
 }

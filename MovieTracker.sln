@@ -1,16 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieTracker", "MovieTracker\MovieTracker.csproj", "{71349B45-DC4F-4734-81F2-F8DCB2EA7051}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieTracker.Tests.Unit", "MovieTracker.Tests.Unit\MovieTracker.Tests.Unit.csproj", "{1B3AB5F9-CEB5-481B-AD99-A6B4C4C637AA}"
-EndProject
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{08431C4D-4484-476D-8BCE-D2CAE8BFD38F}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieTracker", "MovieTracker\MovieTracker.csproj", "{71349B45-DC4F-4734-81F2-F8DCB2EA7051}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieTracker.Tests.Unit", "MovieTracker.Tests.Unit\MovieTracker.Tests.Unit.csproj", "{1B3AB5F9-CEB5-481B-AD99-A6B4C4C637AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
