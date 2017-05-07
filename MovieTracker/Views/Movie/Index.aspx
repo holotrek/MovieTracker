@@ -7,7 +7,7 @@
 
     <script type="text/javascript">
         $(function () {
-            $(".clearRating").click(function () {
+            var clearRating = function () {
                 var $td = $(this).closest("td");
                 var movieToClearRating = {
                     movieId: $(this).closest(".movieRating").data('movieid')
@@ -17,10 +17,15 @@
                     data: movieToClearRating,
                     success: function (data) {
                         $td.empty().append(data);
+                        rebindEvents($td);
+                    },
+                    error: function (err) {
+                        alert('Error clearing movie rating: ' + err.statusText);
                     }
                 });
-            });
-            $(".star").click(function () {
+            };
+
+            var changeRating = function () {
                 var $td = $(this).closest("td");
                 var rating = $(this).index() + 1;
 
@@ -34,15 +39,30 @@
                     data: movieToRate,
                     success: function (data) {
                         $td.empty().append(data);
+                        rebindEvents($td);
+                    },
+                    error: function (err) {
+                        alert('Error changing movie rating: ' + err.statusText);
                     }
                 });
-            });
-            $(".star").hover(function () {
-                $(this).prevAll(".star").addBack().addClass("hovered");
+            };
 
-            }, function () {
+            var hoverRating = function () {
+                $(this).prevAll(".star").addBack().addClass("hovered");
+            };
+            var unHoverRating = function () {
                 $(this).siblings(".star").addBack().removeClass("hovered");
-            });
+            };
+
+            var rebindEvents = function ($td) {
+                $(".clearRating", $td).click(clearRating);
+                $(".star", $td).click(changeRating);
+                $(".star", $td).hover(hoverRating, unHoverRating);
+            };
+
+            $(".clearRating").click(clearRating);
+            $(".star").click(changeRating);
+            $(".star").hover(hoverRating, unHoverRating);
         })
     
     </script>

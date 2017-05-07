@@ -11,7 +11,8 @@ namespace MovieTracker.Models
         public string OldPassword { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [RegularExpression("(?=(.*[^a-zA-Z0-9]){3,}).{10,}", ErrorMessage = "The {0} must be 10 or more characters and contain a minimum of 3 non-alphanumeric characters.")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 10)]
         [DataType(DataType.Password)]
         [Display(Name = "New password")]
         public string NewPassword { get; set; }
@@ -49,7 +50,8 @@ namespace MovieTracker.Models
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [RegularExpression("(?=(.*[^a-zA-Z0-9]){3,}).{10,}", ErrorMessage = "The {0} must be 10 or more characters and contain a minimum of 3 non-alphanumeric characters.")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 10)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }

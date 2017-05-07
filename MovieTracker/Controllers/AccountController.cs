@@ -80,7 +80,7 @@ namespace MovieTracker.Controllers
                 if (createStatus == MembershipCreateStatus.Success)
                 {
                     FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Add", "Movie");
                 }
                 else
                 {

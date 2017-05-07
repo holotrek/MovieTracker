@@ -27,8 +27,7 @@ namespace MovieTracker.Tests.Unit.Controllers
 
 
             var result = (RedirectToRouteResult) movieController.Index();
-
-
+            
             Assert.IsTrue(string.Compare(result.Action(), "register", true) == 0);
             Assert.IsTrue(string.Compare(result.Controller(), "account", true) == 0);
         }
@@ -45,10 +44,9 @@ namespace MovieTracker.Tests.Unit.Controllers
 
             IRepository<Movie> movieRepository = new FakeMovieRepository();
             var movieController = new MovieController(movieRepository, null, membershipService)
-                                      {
-                                          ControllerContext = new FakeControllerContext()
-                                      };
-
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var result = movieController.Index() as ViewResult;
             Assert.IsNotNull(result);
@@ -61,7 +59,9 @@ namespace MovieTracker.Tests.Unit.Controllers
 
             IRepository<Movie> movieRepository = new FakeMovieRepository();
             var movieController = new MovieController(movieRepository, null, membershipService)
-                                      {ControllerContext = new FakeControllerContext()};
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var result = (RedirectToRouteResult) movieController.Detail(42);
 
@@ -69,16 +69,45 @@ namespace MovieTracker.Tests.Unit.Controllers
         }
 
         [TestMethod]
-        public void Detail_WithMovieFound_ReturnsView()
+        public void Detail_WithMovieFoundNotOwnedByUser_RedirectsToMovieNotAuthorized()
         {
             IMembershipService membershipService = new FakeMembershipService(Enumerable.Empty<MembershipUser>());
 
             var movies = new List<Movie>();
             const int movieId = 42;
-            movies.Add(new Movie {Id = movieId});
+            movies.Add(new Movie { Id = movieId });
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
-            var movieController = new MovieController(movieRepository, null, membershipService);
+            var movieController = new MovieController(movieRepository, null, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
+            var result = (RedirectToRouteResult)movieController.Detail(42);
+
+            Assert.IsTrue(string.Compare(result.Action(), "MovieNotAuthorized", true) == 0);
+        }
+
+        [TestMethod]
+        public void Detail_WithMovieFoundOwnedByUser_ReturnsView()
+        {
+            Guid guid = Guid.NewGuid();
+            var users = new List<MembershipUser>();
+            users.Add(new TestMembershipUser("test", guid));
+            IMembershipService membershipService = new FakeMembershipService(users);
+
+            var movies = new List<Movie>();
+            const int movieId = 42;
+            movies.Add(new Movie
+            {
+                Id = movieId,
+                aspnet_UsersUserId = guid
+            });
+
+            IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
+            var movieController = new MovieController(movieRepository, null, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var result = movieController.Detail(movieId) as ViewResult;
 
@@ -91,7 +120,10 @@ namespace MovieTracker.Tests.Unit.Controllers
             IMembershipService membershipService = new FakeMembershipService(Enumerable.Empty<MembershipUser>());
 
             IRepository<Movie> movieRepository = new FakeMovieRepository();
-            var movieController = new MovieController(movieRepository, null, membershipService);
+            var movieController = new MovieController(movieRepository, null, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var result = (RedirectToRouteResult) movieController.Edit(42);
 
@@ -99,17 +131,47 @@ namespace MovieTracker.Tests.Unit.Controllers
         }
 
         [TestMethod]
-        public void Edit_WithMovieFound_ReturnsView()
+        public void Edit_WithMovieFoundNotOwnedByUser_RedirectsToMovieNotAuthorized()
         {
             IMembershipService membershipService = new FakeMembershipService(Enumerable.Empty<MembershipUser>());
 
             var movies = new List<Movie>();
             const int movieId = 42;
-            movies.Add(new Movie {Id = movieId});
+            movies.Add(new Movie { Id = movieId });
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
-            var movieController = new MovieController(movieRepository, genreRepository, membershipService);
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
+            var result = (RedirectToRouteResult)movieController.Edit(movieId);
+
+            Assert.IsTrue(string.Compare(result.Action(), "MovieNotAuthorized", true) == 0);
+        }
+
+        [TestMethod]
+        public void Edit_WithMovieFoundOwnedByUser_ReturnsView()
+        {
+            Guid guid = Guid.NewGuid();
+            var users = new List<MembershipUser>();
+            users.Add(new TestMembershipUser("test", guid));
+            IMembershipService membershipService = new FakeMembershipService(users);
+
+            var movies = new List<Movie>();
+            const int movieId = 42;
+            movies.Add(new Movie
+            {
+                Id = movieId,
+                aspnet_UsersUserId = guid
+            });
+
+            IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
+            IRepository<Genre> genreRepository = new FakeGenreRepository();
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var result = movieController.Edit(movieId) as ViewResult;
 
@@ -124,8 +186,10 @@ namespace MovieTracker.Tests.Unit.Controllers
             var movies = new List<Movie>();
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
-            var movieController = new MovieController(movieRepository, genreRepository, membershipService);
-
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var result = (RedirectToRouteResult) movieController.Edit(new EditMovieViewModel());
 
@@ -133,29 +197,71 @@ namespace MovieTracker.Tests.Unit.Controllers
         }
 
         [TestMethod]
-        public void Edit_WithMovieToEditFound_RedirectsToIndex()
+        public void Edit_WithMovieToEditFoundNotOwnedByUser_RedirectsToMovieNotAuthorized()
         {
             IMembershipService membershipService = new FakeMembershipService(Enumerable.Empty<MembershipUser>());
 
             var movies = new List<Movie>();
             const int movieId = 42;
-            movies.Add(new Movie {Id = movieId});
+            movies.Add(new Movie { Id = movieId });
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
-            var movieController = new MovieController(movieRepository, genreRepository, membershipService);
-
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var editMovieViewModel = new EditMovieViewModel
-                                         {
-                                             Id = movieId,
-                                             Directors = "Directors",
-                                             GenreId = 1,
-                                             Name = "Name",
-                                             Rating = 3,
-                                             Stars = "Stars",
-                                             Writers = "Writers"
-                                         };
-            var result = (RedirectToRouteResult) movieController.Edit(editMovieViewModel);
+            {
+                Id = movieId,
+                Directors = "Directors",
+                GenreId = 1,
+                Name = "Name",
+                Rating = 3,
+                Stars = "Stars",
+                Writers = "Writers"
+            };
+
+            var result = (RedirectToRouteResult)movieController.Edit(editMovieViewModel);
+
+            Assert.IsTrue(string.Compare(result.Action(), "MovieNotAuthorized", true) == 0);
+        }
+
+        [TestMethod]
+        public void Edit_WithMovieToEditFoundOwnedByUser_RedirectsToIndex()
+        {
+            Guid guid = Guid.NewGuid();
+            var users = new List<MembershipUser>();
+            users.Add(new TestMembershipUser("test", guid));
+            IMembershipService membershipService = new FakeMembershipService(users);
+
+            var movies = new List<Movie>();
+            const int movieId = 42;
+            movies.Add(new Movie
+            {
+                Id = movieId,
+                aspnet_UsersUserId = guid
+            });
+
+            IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
+            IRepository<Genre> genreRepository = new FakeGenreRepository();
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
+
+            var editMovieViewModel = new EditMovieViewModel
+            {
+                Id = movieId,
+                Directors = "Directors",
+                GenreId = 1,
+                Name = "Name",
+                Rating = 3,
+                Stars = "Stars",
+                Writers = "Writers"
+            };
+
+            var result = (RedirectToRouteResult)movieController.Edit(editMovieViewModel);
 
             Assert.IsTrue(string.Compare(result.Action(), "Index", true) == 0);
         }
@@ -170,8 +276,10 @@ namespace MovieTracker.Tests.Unit.Controllers
             movies.Add(new Movie {Id = movieId});
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
-            var movieController = new MovieController(movieRepository, genreRepository, membershipService);
-
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             //setup model error to trigger !IsValid
             movieController.ModelState.AddModelError("key", "errormessage");
@@ -189,8 +297,10 @@ namespace MovieTracker.Tests.Unit.Controllers
             IRepository<Movie> movieRepository = new FakeMovieRepository();
             IRepository<Genre> genreRepository = new FakeGenreRepository();
 
-            var movieController = new MovieController(movieRepository, genreRepository, membershipService);
-
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var result = movieController.Add() as ViewResult;
 
@@ -207,8 +317,10 @@ namespace MovieTracker.Tests.Unit.Controllers
             movies.Add(new Movie {Id = movieId});
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
-            var movieController = new MovieController(movieRepository, genreRepository, membershipService);
-
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             //setup model error to trigger !IsValid
             movieController.ModelState.AddModelError("key", "errormessage");
@@ -229,7 +341,9 @@ namespace MovieTracker.Tests.Unit.Controllers
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
             var movieController = new MovieController(movieRepository, genreRepository, membershipService)
-                                      {ControllerContext = new FakeControllerContext()};
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var result = (RedirectToRouteResult) movieController.Add(new EditMovieViewModel());
 
@@ -256,7 +370,9 @@ namespace MovieTracker.Tests.Unit.Controllers
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies, addCallback: addAction);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
             var movieController = new MovieController(movieRepository, genreRepository, membershipService)
-                                      {ControllerContext = new FakeControllerContext()};
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var editMovieViewModel = new EditMovieViewModel
                                          {
@@ -293,7 +409,9 @@ namespace MovieTracker.Tests.Unit.Controllers
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies, saveCallback: saveAction);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
             var movieController = new MovieController(movieRepository, genreRepository, membershipService)
-                                      {ControllerContext = new FakeControllerContext()};
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var editMovieViewModel = new EditMovieViewModel
                                          {
@@ -327,7 +445,9 @@ namespace MovieTracker.Tests.Unit.Controllers
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
             var movieController = new MovieController(movieRepository, genreRepository, membershipService)
-                                      {ControllerContext = new FakeControllerContext()};
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var editMovieViewModel = new EditMovieViewModel
                                          {
@@ -353,26 +473,58 @@ namespace MovieTracker.Tests.Unit.Controllers
             var movies = new List<Movie>();
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
-            var movieController = new MovieController(movieRepository, genreRepository, membershipService);
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
-
-            var result = (RedirectToRouteResult) movieController.Edit(42);
+            var result = (RedirectToRouteResult)movieController.Edit(42);
 
             Assert.IsTrue(string.Compare(result.Action(), "MoveNotFound", true) == 0);
         }
 
         [TestMethod]
-        public void Delete_WithMovieFound_ReturnsView()
+        public void Delete_WithMovieFoundNotOwnedByUser_RedirectsToMovieNotAuthorized()
         {
             IMembershipService membershipService = new FakeMembershipService(Enumerable.Empty<MembershipUser>());
 
             var movies = new List<Movie>();
             const int movieId = 42;
-            movies.Add(new Movie {Id = movieId});
+            movies.Add(new Movie { Id = movieId });
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
-            var movieController = new MovieController(movieRepository, genreRepository, membershipService);
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
+            var result = (RedirectToRouteResult)movieController.Delete(movieId);
+
+            Assert.IsTrue(string.Compare(result.Action(), "MovieNotAuthorized", true) == 0);
+        }
+
+        [TestMethod]
+        public void Delete_WithMovieFoundOwnedByUser_ReturnsView()
+        {
+            Guid guid = Guid.NewGuid();
+            var users = new List<MembershipUser>();
+            users.Add(new TestMembershipUser("test", guid));
+            IMembershipService membershipService = new FakeMembershipService(users);
+
+            var movies = new List<Movie>();
+            const int movieId = 42;
+            movies.Add(new Movie
+            {
+                Id = movieId,
+                aspnet_UsersUserId = guid
+            });
+
+            IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
+            IRepository<Genre> genreRepository = new FakeGenreRepository();
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var result = movieController.Delete(movieId) as ViewResult;
 
@@ -390,25 +542,32 @@ namespace MovieTracker.Tests.Unit.Controllers
 
             var movies = new List<Movie>();
             const int movieId = 42;
-            movies.Add(new Movie {Id = movieId});
+            movies.Add(new Movie
+            {
+                Id = movieId,
+                aspnet_UsersUserId = guid
+            });
 
             bool wasCalled = false;
             Action deleteCallback = () => wasCalled = true;
 
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies, deleteCallback: deleteCallback);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
-            var movieController = new MovieController(movieRepository, genreRepository, membershipService);
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var movie = new Movie
-                            {
-                                Id = movieId,
-                                Directors = "Directors",
-                                GenreId = 1,
-                                Name = "Name",
-                                Rating = 3,
-                                Stars = "Stars",
-                                Writers = "Writers"
-                            };
+            {
+                Id = movieId,
+                Directors = "Directors",
+                GenreId = 1,
+                Name = "Name",
+                Rating = 3,
+                Stars = "Stars",
+                Writers = "Writers"
+            };
 
             movieController.Delete(movie);
 
@@ -426,25 +585,32 @@ namespace MovieTracker.Tests.Unit.Controllers
 
             var movies = new List<Movie>();
             const int movieId = 42;
-            movies.Add(new Movie {Id = movieId});
+            movies.Add(new Movie
+            {
+                Id = movieId,
+                aspnet_UsersUserId = guid
+            });
 
             bool wasCalled = false;
             Action saveAction = () => wasCalled = true;
 
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies, saveCallback: saveAction);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
-            var movieController = new MovieController(movieRepository, genreRepository, membershipService);
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             var movie = new Movie
-                            {
-                                Id = movieId,
-                                Directors = "Directors",
-                                GenreId = 1,
-                                Name = "Name",
-                                Rating = 3,
-                                Stars = "Stars",
-                                Writers = "Writers"
-                            };
+            {
+                Id = movieId,
+                Directors = "Directors",
+                GenreId = 1,
+                Name = "Name",
+                Rating = 3,
+                Stars = "Stars",
+                Writers = "Writers"
+            };
 
             movieController.Delete(movie);
 
@@ -454,27 +620,34 @@ namespace MovieTracker.Tests.Unit.Controllers
         [TestMethod]
         public void ClearRating_WithValidMovieId_ClearsRatingOnMovie()
         {
-            IMembershipService membershipService = new FakeMembershipService(Enumerable.Empty<MembershipUser>());
+            var users = new List<MembershipUser>();
+            Guid guid = Guid.NewGuid();
+            users.Add(new TestMembershipUser("test", guid));
+
+            IMembershipService membershipService = new FakeMembershipService(users);
 
             var movies = new List<Movie>();
             const int movieId = 42;
             var movie = new Movie
-                            {
-                                Id = movieId,
-                                Directors = "Directors",
-                                GenreId = 1,
-                                Name = "Name",
-                                Rating = 3,
-                                Stars = "Stars",
-                                Writers = "Writers"
-                            };
+            {
+                aspnet_UsersUserId = guid,
+                Id = movieId,
+                Directors = "Directors",
+                GenreId = 1,
+                Name = "Name",
+                Rating = 3,
+                Stars = "Stars",
+                Writers = "Writers"
+            };
+
             movies.Add(movie);
-
-
+            
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
-            var movieController = new MovieController(movieRepository, genreRepository, membershipService);
-
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             movieController.ClearRating(movieId);
 
@@ -482,22 +655,60 @@ namespace MovieTracker.Tests.Unit.Controllers
         }
 
         [TestMethod]
-        public void ClearRating_WithValidMovieId_CallsSaveOnMovieRepository()
+        public void ClearRating_WithValidMovieNotOwnedByUser_ReturnsForbiddenResult()
         {
             IMembershipService membershipService = new FakeMembershipService(Enumerable.Empty<MembershipUser>());
 
             var movies = new List<Movie>();
             const int movieId = 42;
             var movie = new Movie
-                            {
-                                Id = movieId,
-                                Directors = "Directors",
-                                GenreId = 1,
-                                Name = "Name",
-                                Rating = 3,
-                                Stars = "Stars",
-                                Writers = "Writers"
-                            };
+            {
+                Id = movieId,
+                Directors = "Directors",
+                GenreId = 1,
+                Name = "Name",
+                Rating = 3,
+                Stars = "Stars",
+                Writers = "Writers"
+            };
+
+            movies.Add(movie);
+
+            IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
+            IRepository<Genre> genreRepository = new FakeGenreRepository();
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
+
+            HttpStatusCodeResult result = movieController.ClearRating(movieId) as HttpStatusCodeResult;
+
+            Assert.AreEqual(403, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void ClearRating_WithValidMovieId_CallsSaveOnMovieRepository()
+        {
+            var users = new List<MembershipUser>();
+            Guid guid = Guid.NewGuid();
+            users.Add(new TestMembershipUser("test", guid));
+
+            IMembershipService membershipService = new FakeMembershipService(users);
+
+            var movies = new List<Movie>();
+            const int movieId = 42;
+            var movie = new Movie
+            {
+                aspnet_UsersUserId = guid,
+                Id = movieId,
+                Directors = "Directors",
+                GenreId = 1,
+                Name = "Name",
+                Rating = 3,
+                Stars = "Stars",
+                Writers = "Writers"
+            };
+
             movies.Add(movie);
 
             bool wasCalled = false;
@@ -506,8 +717,9 @@ namespace MovieTracker.Tests.Unit.Controllers
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies, saveCallback: saveAction);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
             var movieController = new MovieController(movieRepository, genreRepository, membershipService)
-                                      {ControllerContext = new FakeControllerContext()};
-
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             movieController.ClearRating(movieId);
 
@@ -517,28 +729,34 @@ namespace MovieTracker.Tests.Unit.Controllers
         [TestMethod]
         public void AddRating_WithValidMovieId_AdjustsMovieRating()
         {
-            IMembershipService membershipService = new FakeMembershipService(Enumerable.Empty<MembershipUser>());
+            var users = new List<MembershipUser>();
+            Guid guid = Guid.NewGuid();
+            users.Add(new TestMembershipUser("test", guid));
+
+            IMembershipService membershipService = new FakeMembershipService(users);
 
             var movies = new List<Movie>();
             const int movieId = 42;
             var movie = new Movie
-                            {
-                                Id = movieId,
-                                Directors = "Directors",
-                                GenreId = 1,
-                                Name = "Name",
-                                Rating = 3,
-                                Stars = "Stars",
-                                Writers = "Writers"
-                            };
-            movies.Add(movie);
+            {
+                aspnet_UsersUserId = guid,
+                Id = movieId,
+                Directors = "Directors",
+                GenreId = 1,
+                Name = "Name",
+                Rating = 3,
+                Stars = "Stars",
+                Writers = "Writers"
+            };
 
+            movies.Add(movie);
 
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
             var movieController = new MovieController(movieRepository, genreRepository, membershipService)
-                                      {ControllerContext = new FakeControllerContext()};
-
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             const short newRating = 5;
             movieController.AddRating(movieId, newRating);
@@ -547,22 +765,61 @@ namespace MovieTracker.Tests.Unit.Controllers
         }
 
         [TestMethod]
-        public void AddRating_WithValidMovieId_CallsSaveOnMovieRepository()
+        public void AddRating_WithValidMovieNotOwnedByUser_ReturnsForbidden()
         {
             IMembershipService membershipService = new FakeMembershipService(Enumerable.Empty<MembershipUser>());
 
             var movies = new List<Movie>();
             const int movieId = 42;
             var movie = new Movie
-                            {
-                                Id = movieId,
-                                Directors = "Directors",
-                                GenreId = 1,
-                                Name = "Name",
-                                Rating = 3,
-                                Stars = "Stars",
-                                Writers = "Writers"
-                            };
+            {
+                Id = movieId,
+                Directors = "Directors",
+                GenreId = 1,
+                Name = "Name",
+                Rating = 3,
+                Stars = "Stars",
+                Writers = "Writers"
+            };
+
+            movies.Add(movie);
+
+            IRepository<Movie> movieRepository = new FakeMovieRepository(movies);
+            IRepository<Genre> genreRepository = new FakeGenreRepository();
+            var movieController = new MovieController(movieRepository, genreRepository, membershipService)
+            {
+                ControllerContext = new FakeControllerContext()
+            };
+
+            const short newRating = 5;
+            HttpStatusCodeResult result = movieController.AddRating(movieId, newRating) as HttpStatusCodeResult;
+
+            Assert.AreEqual(403, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void AddRating_WithValidMovieId_CallsSaveOnMovieRepository()
+        {
+            var users = new List<MembershipUser>();
+            Guid guid = Guid.NewGuid();
+            users.Add(new TestMembershipUser("test", guid));
+
+            IMembershipService membershipService = new FakeMembershipService(users);
+
+            var movies = new List<Movie>();
+            const int movieId = 42;
+            var movie = new Movie
+            {
+                aspnet_UsersUserId = guid,
+                Id = movieId,
+                Directors = "Directors",
+                GenreId = 1,
+                Name = "Name",
+                Rating = 3,
+                Stars = "Stars",
+                Writers = "Writers"
+            };
+
             movies.Add(movie);
 
             bool wasCalled = false;
@@ -571,8 +828,9 @@ namespace MovieTracker.Tests.Unit.Controllers
             IRepository<Movie> movieRepository = new FakeMovieRepository(movies, saveCallback: saveAction);
             IRepository<Genre> genreRepository = new FakeGenreRepository();
             var movieController = new MovieController(movieRepository, genreRepository, membershipService)
-                                      {ControllerContext = new FakeControllerContext()};
-
+            {
+                ControllerContext = new FakeControllerContext()
+            };
 
             movieController.AddRating(movieId, 5);
 

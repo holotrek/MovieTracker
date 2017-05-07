@@ -6,6 +6,7 @@ using System.Web.Security;
 using MovieTracker.Data;
 using MovieTracker.Models;
 using MovieTracker.Services;
+using System.Net;
 
 namespace MovieTracker.Controllers
 {
@@ -47,6 +48,12 @@ namespace MovieTracker.Controllers
                 return RedirectToAction("MoveNotFound");
             }
 
+            MembershipUser user = _membershipService.GetUser(User.Identity.Name);
+            if (!movie.IsOwnedBy(user))
+            {
+                return RedirectToAction("MovieNotAuthorized");
+            }
+
             return View(movie);
         }
 
@@ -57,6 +64,12 @@ namespace MovieTracker.Controllers
             if (movie == null)
             {
                 return RedirectToAction("MoveNotFound");
+            }
+
+            MembershipUser user = _membershipService.GetUser(User.Identity.Name);
+            if (!movie.IsOwnedBy(user))
+            {
+                return RedirectToAction("MovieNotAuthorized");
             }
 
             IEnumerable<Genre> genres = _genreRepository.GetAll();
@@ -88,6 +101,12 @@ namespace MovieTracker.Controllers
                 if (movie == null)
                 {
                     return RedirectToAction("MoveNotFound");
+                }
+
+                MembershipUser user = _membershipService.GetUser(User.Identity.Name);
+                if (!movie.IsOwnedBy(user))
+                {
+                    return RedirectToAction("MovieNotAuthorized");
                 }
 
                 movie.Directors = editMovieViewModel.Directors;
@@ -161,6 +180,12 @@ namespace MovieTracker.Controllers
                 return RedirectToAction("MoveNotFound");
             }
 
+            MembershipUser user = _membershipService.GetUser(User.Identity.Name);
+            if (!movie.IsOwnedBy(user))
+            {
+                return RedirectToAction("MovieNotAuthorized");
+            }
+
             return View(movie);
         }
 
@@ -169,6 +194,13 @@ namespace MovieTracker.Controllers
         public ActionResult Delete(Movie movie)
         {
             Movie movieToDelete = _movieRepository.Find(m => m.Id == movie.Id).FirstOrDefault();
+
+            MembershipUser user = _membershipService.GetUser(User.Identity.Name);
+            if (!movieToDelete.IsOwnedBy(user))
+            {
+                return RedirectToAction("MovieNotAuthorized");
+            }
+
             _movieRepository.Delete(movieToDelete);
             _movieRepository.Save();
 
@@ -181,6 +213,12 @@ namespace MovieTracker.Controllers
             Movie movie = _movieRepository.Find(m => m.Id == movieId).Single();
             movie.ClearRating();
 
+            MembershipUser user = _membershipService.GetUser(User.Identity.Name);
+            if (!movie.IsOwnedBy(user))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
             _movieRepository.Save();
 
             return View("MovieRatingControl", movie);
@@ -191,6 +229,12 @@ namespace MovieTracker.Controllers
         {
             Movie movie = _movieRepository.Find(m => m.Id == movieId).Single();
 
+            MembershipUser user = _membershipService.GetUser(User.Identity.Name);
+            if (!movie.IsOwnedBy(user))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
             movie.Rating = rating;
 
             _movieRepository.Save();
@@ -199,6 +243,11 @@ namespace MovieTracker.Controllers
         }
 
         public ActionResult MoveNotFound()
+        {
+            return View();
+        }
+
+        public ActionResult MovieNotAuthorized()
         {
             return View();
         }

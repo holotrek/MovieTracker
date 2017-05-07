@@ -231,6 +231,7 @@
     <Content Include="Views\Movie\Detail.aspx" />
     <Content Include="Views\Movie\Edit.aspx" />
     <Content Include="Views\Movie\Index.aspx" />
+    <Content Include="Views\Movie\MovieNotAuthorized.aspx" />
     <Content Include="Views\Movie\MoveNotFound.aspx" />
     <Content Include="Views\Movie\MovieRatingControl.ascx" />
     <Content Include="Web.config">

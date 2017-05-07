@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace MovieTracker.Data
 {
@@ -20,7 +21,7 @@ namespace MovieTracker.Data
             _entities.SaveChanges();
         }
 
-        public IEnumerable<Genre> Find(Func<Genre, bool> filter)
+        public IEnumerable<Genre> Find(Expression<Func<Genre, bool>> filter)
         {
             return _entities.Genres.Where(filter);
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MovieTracker.Data;
+using System.Linq.Expressions;
 
 namespace MovieTracker.Tests.Unit.Fakes
 {
@@ -22,9 +23,9 @@ namespace MovieTracker.Tests.Unit.Fakes
         {
         }
 
-        public IEnumerable<Genre> Find(Func<Genre, bool> filter)
+        public IEnumerable<Genre> Find(Expression<Func<Genre, bool>> filter)
         {
-            return _genres.Where(filter);
+            return _genres.Where(filter.Compile());
         }
 
         public void Delete(Genre model)
