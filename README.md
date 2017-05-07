@@ -60,9 +60,14 @@ Planned Bugs
 	 
 Features Requested
 --
- - As a user when there are numerous items on the page I would like a way to filter the movie list
+ - As a user when there are numerous items on the page I would like a way to filter the movie list *(DONE)*
    - Create a free form text box that filters out the movie list as you type.  The filter should be based off of movie name.
    - This text box should be placed above the movie list.
+   - Solution
+     - Moved movie list to a partial view
+	 - Added method to get movie list with an optional filter
+	 - Added filter input to Index view
+	 - Added JS to update the movie list partial view container when the filter input changed
  - As a user I would like to mark a movie as lent to a friend with date and click to mark it as returned.
    - Movie Details
      - Under movie detail add a section for a free form text box to record a friends name and also date for when the movie was lent to your friend

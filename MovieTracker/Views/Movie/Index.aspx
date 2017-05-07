@@ -63,54 +63,45 @@
             $(".clearRating").click(clearRating);
             $(".star").click(changeRating);
             $(".star").hover(hoverRating, unHoverRating);
+
+            var movieListRequestActive = false;
+            var delay = 500;
+            var delayTimeout;
+        
+            var filterKeyUp = function () {
+                var $input = $(this);
+
+                // Don't allow a request until the user has stopped typing for the "delay" amount
+                if (delayTimeout) {
+                    clearTimeout(delayTimeout);
+                }
+
+                delayTimeout = setTimeout(function () {
+                    filterMovies($input.val());
+                }, delay);
+            };
+
+            $('.movie-filter').find('input').keyup(filterKeyUp);
+
+            var filterMovies = function (filterVal) {
+                $.ajax('<%:Url.Action("MovieList") %>?filter=' + filterVal, {
+                    type: 'get',
+                    complete: function () {
+                        movieListRequestActive = false;
+                    },
+                    success: function (data) {
+                        $('#movieListContainer').empty().append(data);
+                        rebindEvents();
+                    }
+                });
+            };
         })
     
     </script>
-
-    <table class="movieList">
-        <thead>
-            <tr>
-                <th>
-                    Edit
-                </th>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Rating
-                </th>
-                <th>
-                    Delete
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <% foreach (var movie in Model)
-               {
-            %>
-            <tr>
-                <td>
-                    <a href="<%:Url.Action("Edit", new { id = movie.Id }) %>" class="edit" title="Edit <%:movie.Name %>"></a>
-                </td>
-                <td>
-                    <%:Html.ActionLink(movie.Name, "Detail", new {id=movie.Id}) %>
-                </td>
-                <td>
-                    <%: Html.Partial("MovieRatingControl", movie) %>
-                </td>
-                <td>
-                    <a href="<%:Url.Action("Delete", new { id = movie.Id }) %>" class="delete" title="Delete <%:movie.Name %>"></a>
-                </td>
-            </tr>
-            <%
-               } %>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4">
-                    <%:Html.ActionLink("Add new movie", "Add") %>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
+    <div class="movie-filter">
+        <strong>Filter Movies:</strong> <input type="text" />
+    </div>
+    <div id="movieListContainer">
+        <%: Html.Partial("MovieList", Model) %>
+    </div>
 </asp:Content>

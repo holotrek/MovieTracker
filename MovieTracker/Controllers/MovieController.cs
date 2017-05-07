@@ -33,11 +33,35 @@ namespace MovieTracker.Controllers
                 return RedirectToAction("Register", "Account");
             }
 
-            var userKey = (Guid) user.ProviderUserKey;
+            var userKey = (Guid)user.ProviderUserKey;
 
             IEnumerable<Movie> movies = _movieRepository.Find(m => m.aspnet_UsersUserId == userKey);
 
             return View(movies);
+        }
+
+        public ActionResult MovieList(string filter = "")
+        {
+            MembershipUser user = _membershipService.GetUser(User.Identity.Name);
+
+            if (user == null)
+            {
+                return RedirectToAction("Register", "Account");
+            }
+
+            var userKey = (Guid)user.ProviderUserKey;
+
+            IEnumerable<Movie> movies = Enumerable.Empty<Movie>();
+            if (string.IsNullOrWhiteSpace(filter))
+            {
+                movies = _movieRepository.Find(m => m.aspnet_UsersUserId == userKey);
+            }
+            else
+            {
+                movies = _movieRepository.Find(m => m.aspnet_UsersUserId == userKey && m.Name.Contains(filter));
+            }
+
+            return PartialView(movies);
         }
 
         public ActionResult Detail(int id)

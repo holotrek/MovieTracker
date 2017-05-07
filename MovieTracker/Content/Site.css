@@ -350,7 +350,7 @@ div#title h1 {
 table label {
     font-weight: bold;
 }
-.movieInput, .movieList,.movieDetail {
+.movieInput, .movieList,.movieDetail,.movie-filter {
     width: 500px;
     margin: 0 auto;
     position: relative;
